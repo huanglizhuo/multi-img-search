@@ -18,6 +18,7 @@
   "build": {
     "appId": "com.multi-img-search.app",
     "productName": "Multi Image Search",
+    "icon": "assets/multi-image-search.png",
     "files": ["out/**/*"],
     "mac": {
       "category": "public.app-category.productivity",

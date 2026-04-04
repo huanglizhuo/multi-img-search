@@ -1,6 +1,14 @@
-# Multi Image Search
+<div align="center">
+  <img src="assets/multi-image-search.png" width="120" alt="Multi Image Search icon" />
+  <h1>Multi Image Search</h1>
+  <p>Search once, see results from multiple image engines simultaneously — built for advertising creatives.</p>
+</div>
 
-A desktop tool for advertising creatives to collect visual inspiration efficiently. Search once, see results from multiple image engines simultaneously in a resizable grid — no tab switching, no repetition.
+---
+
+![Screenshot](assets/screenshoot.png)
+
+---
 
 ## Features
 
