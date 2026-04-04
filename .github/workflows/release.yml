@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*.*.*'
 
+permissions:
+  contents: write  # required to create GitHub Releases and upload assets
+
 jobs:
   release-mac-arm:
     runs-on: macos-14  # Apple Silicon (arm64) runner
@@ -27,12 +30,9 @@ jobs:
 
       - name: Package (electron-builder, macOS arm64 DMG)
         run: npx electron-builder --mac --arm64
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # No GH_TOKEN here — we let softprops handle release creation below
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: dist/*.dmg
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
