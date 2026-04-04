@@ -1,0 +1,458 @@
+/* ---- Reset & Base ---- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ---- App Shell ---- */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #111;
+  color: #eee;
+}
+
+/* ---- Toolbar ---- */
+.toolbar {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 16px 10px 90px; /* left: clear macOS traffic light buttons (hiddenInset) */
+  background: #1e1e1e;
+  border-bottom: 1px solid #333;
+  flex-shrink: 0;
+  -webkit-app-region: drag;
+}
+
+.toolbar > * {
+  -webkit-app-region: no-drag;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+/* ---- Search Bar ---- */
+.search-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.search-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.search-input {
+  flex: 1;
+  height: 36px;
+  padding: 0 12px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #eee;
+  font-size: 14px;
+  outline: none;
+  min-width: 0;
+}
+
+.search-input:focus {
+  border-color: #4a9eff;
+}
+
+.search-btn {
+  height: 36px;
+  padding: 0 16px;
+  background: #4a9eff;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.search-btn:hover {
+  background: #3a8eef;
+}
+
+.search-btn:active {
+  background: #2a7edf;
+}
+
+/* ---- Engine Checkboxes ---- */
+.engine-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+}
+
+.engine-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #aaa;
+  cursor: pointer;
+  user-select: none;
+}
+
+.engine-checkbox input[type='checkbox'] {
+  accent-color: #4a9eff;
+  cursor: pointer;
+}
+
+.engine-checkbox:hover span {
+  color: #eee;
+}
+
+/* ---- Layout Selector ---- */
+.layout-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.layout-mode-group,
+.layout-number-group {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.layout-number-label {
+  font-size: 11px;
+  color: #666;
+  margin-right: 2px;
+}
+
+.layout-btn {
+  height: 28px;
+  padding: 0 10px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #aaa;
+  font-size: 11px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.layout-btn:hover {
+  background: #333;
+  color: #eee;
+}
+
+.layout-btn.active {
+  background: #4a9eff;
+  border-color: #4a9eff;
+  color: #fff;
+}
+
+.layout-num-btn {
+  height: 26px;
+  width: 26px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #aaa;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.layout-num-btn:hover {
+  background: #333;
+  color: #eee;
+}
+
+.layout-num-btn.active {
+  background: #4a9eff;
+  border-color: #4a9eff;
+  color: #fff;
+}
+
+/* ---- Empty grid state ---- */
+.pane-grid-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  font-size: 14px;
+}
+
+/* ---- Settings Button ---- */
+.settings-btn {
+  height: 28px;
+  width: 28px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #aaa;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-btn:hover {
+  background: #333;
+  color: #eee;
+}
+
+/* ---- Pane Grid ---- */
+.pane-grid {
+  flex: 1;
+  display: grid;
+  gap: 0;
+  padding: 0;
+  background: #000;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ---- Search Pane ---- */
+.search-pane {
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  min-height: 0;
+}
+
+/* Hover-only floating label — invisible by default, fades in on pane hover */
+.pane-label {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+}
+
+.search-pane:hover .pane-label {
+  opacity: 1;
+}
+
+/* ---- Settings Panel ---- */
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.settings-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100vh;
+  background: #1e1e1e;
+  border-left: 1px solid #333;
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid #333;
+}
+
+.settings-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #eee;
+}
+
+.settings-close {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.settings-close:hover {
+  color: #eee;
+}
+
+.settings-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.settings-section h3 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+/* ---- Toggle Switch ---- */
+.settings-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  cursor: default;
+}
+
+.toggle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.toggle-title {
+  font-size: 14px;
+  color: #eee;
+}
+
+.toggle-desc {
+  font-size: 11px;
+  color: #666;
+}
+
+.toggle-switch {
+  width: 40px;
+  height: 22px;
+  background: #444;
+  border-radius: 11px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.toggle-switch.on {
+  background: #4a9eff;
+}
+
+.toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.toggle-switch.on .toggle-knob {
+  transform: translateX(18px);
+}
+
+/* ---- Folder Picker ---- */
+.folder-picker {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.folder-path {
+  flex: 1;
+  font-size: 12px;
+  color: #888;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+
+.folder-browse-btn {
+  height: 28px;
+  padding: 0 12px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #aaa;
+  font-size: 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.folder-browse-btn:hover {
+  background: #333;
+  color: #eee;
+}
+
+.settings-hint {
+  font-size: 11px;
+  color: #555;
+}
+
+/* ---- Notification Toast ---- */
+.notification {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #1e1e1e;
+  border: 1px solid #4a9eff;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: #4a9eff;
+  z-index: 200;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  animation: slideIn 0.2s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
