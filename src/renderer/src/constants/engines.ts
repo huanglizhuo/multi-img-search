@@ -49,6 +49,16 @@ export const SEARCH_ENGINES: SearchEngine[] = [
     id: 'instagram',
     name: 'Instagram',
     buildUrl: (q) => `https://www.instagram.com/explore/tags/${encodeURIComponent(q)}/`
+  },
+  {
+    id: '500px',
+    name: '500px',
+    buildUrl: (q) => `https://500px.com/search?q=${encodeURIComponent(q)}&type=photos`
+  },
+  {
+    id: 'flickr',
+    name: 'Flickr',
+    buildUrl: (q) => `https://www.flickr.com/search/?q=${encodeURIComponent(q)}`
   }
 ]
 

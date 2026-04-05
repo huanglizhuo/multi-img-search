@@ -1,6 +1,6 @@
 {
   "name": "multi-img-search",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Multi-engine image search tool for advertising creatives",
   "main": "out/main/index.js",
   "scripts": {
