@@ -17,7 +17,7 @@ const store = new Store<AppSettings>({
   }
 })
 
-export function registerIpcHandlers(mainWindow: BrowserWindow): void {
+export function registerIpcHandlers(): void {
   // ---- SETTINGS ----
   ipcMain.handle('get-settings', () => {
     return {
@@ -71,7 +71,9 @@ export function registerIpcHandlers(mainWindow: BrowserWindow): void {
       response.on('data', (chunk) => writer.write(chunk))
       response.on('end', () => {
         writer.end(() => {
-          mainWindow.webContents.send('download-complete', filename)
+          // Get whichever window is currently open rather than holding a stale ref
+          const win = BrowserWindow.getAllWindows()[0]
+          win?.webContents.send('download-complete', filename)
         })
       })
       response.on('error', (err) => {
