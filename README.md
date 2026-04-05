@@ -12,7 +12,7 @@
 
 ## Features
 
-- **7 engines at once**: Google Images, Bing Images, Yandex Images, Pinterest, Unsplash, Dribbble, Pexels
+- **9 engines at once**: Google Images, Bing Images, Yandex Images, Pinterest, Unsplash, Dribbble, Pexels, Behance, Instagram
 - **Synchronized scrolling**: scroll one pane, all others follow at the same visual speed
 - **Shift+click to download**: hold Shift and click any image to save it to your Downloads folder
 - **Flexible grid layouts**: Auto, fix-columns, or fix-rows mode with orphan-panel expansion

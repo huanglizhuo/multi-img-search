@@ -39,6 +39,16 @@ export const SEARCH_ENGINES: SearchEngine[] = [
     id: 'pexels',
     name: 'Pexels',
     buildUrl: (q) => `https://www.pexels.com/search/${encodeURIComponent(q)}/`
+  },
+  {
+    id: 'behance',
+    name: 'Behance',
+    buildUrl: (q) => `https://www.behance.net/search/projects?search=${encodeURIComponent(q)}`
+  },
+  {
+    id: 'instagram',
+    name: 'Instagram',
+    buildUrl: (q) => `https://www.instagram.com/explore/tags/${encodeURIComponent(q)}/`
   }
 ]
 
