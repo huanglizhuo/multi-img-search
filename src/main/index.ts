@@ -1,8 +1,17 @@
-import { app, BrowserWindow, session } from 'electron'
-import { join } from 'path'
+import { app, BrowserWindow, session, Menu, MenuItem, dialog, net } from 'electron'
+import { join, extname, basename } from 'path'
+import { createWriteStream } from 'fs'
 import { registerIpcHandlers } from './ipc'
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
+
+// Electron throws "Render frame was disposed before WebFrameMain could be
+// accessed" when a webview navigates (e.g. login redirects) and an internal
+// callback races against the frame teardown. This is harmless — swallow it.
+process.on('uncaughtException', (error) => {
+  if (error.message?.includes('Render frame was disposed')) return
+  console.error('Uncaught Exception:', error)
+})
 
 // Mimic a real Chrome browser — prevents sites like Pexels/Yandex from
 // rejecting requests that carry the default Electron UA string.
@@ -37,6 +46,71 @@ function applySessionOverrides(sess: Electron.Session): void {
 // Keep old name as alias so call sites don't need changing
 const applyHeaderOverrides = applySessionOverrides
 
+function saveImageFromUrl(url: string): void {
+  // net.request only supports http/https — blob: and data: URLs cannot be fetched this way
+  if (!url.startsWith('http://') && !url.startsWith('https://')) return
+
+  let filename = basename(new URL(url).pathname) || 'image'
+  if (!extname(filename)) filename += '.jpg'
+
+  dialog
+    .showSaveDialog({ defaultPath: join(app.getPath('downloads'), filename) })
+    .then(({ canceled, filePath }) => {
+      if (canceled || !filePath) return
+      const req = net.request({ url, redirect: 'follow' })
+      req.on('response', (res) => {
+        const writer = createWriteStream(filePath)
+        res.on('data', (chunk) => writer.write(chunk))
+        res.on('end', () => writer.end())
+      })
+      req.on('error', (err) => console.error('Image download error:', err))
+      req.end()
+    })
+}
+
+function attachContextMenu(webContents: Electron.WebContents): void {
+  webContents.on('context-menu', (_e, params) => {
+    const menu = new Menu()
+
+    // Image actions
+    if (params.hasImageContents && params.srcURL) {
+      menu.append(new MenuItem({
+        label: 'Save Image As…',
+        click: () => saveImageFromUrl(params.srcURL)
+      }))
+      menu.append(new MenuItem({
+        label: 'Copy Image Address',
+        click: () => { require('electron').clipboard.writeText(params.srcURL) }
+      }))
+      menu.append(new MenuItem({ type: 'separator' }))
+    }
+
+    // Text selection
+    if (params.selectionText) {
+      menu.append(new MenuItem({ label: 'Copy', role: 'copy' }))
+      menu.append(new MenuItem({ type: 'separator' }))
+    }
+
+    // Navigation
+    menu.append(new MenuItem({
+      label: 'Back',
+      enabled: webContents.canGoBack(),
+      click: () => webContents.goBack()
+    }))
+    menu.append(new MenuItem({
+      label: 'Forward',
+      enabled: webContents.canGoForward(),
+      click: () => webContents.goForward()
+    }))
+    menu.append(new MenuItem({
+      label: 'Reload',
+      click: () => webContents.reload()
+    }))
+
+    menu.popup()
+  })
+}
+
 function createWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
     width: 1440,
@@ -54,10 +128,10 @@ function createWindow(): BrowserWindow {
     }
   })
 
-  // Apply header overrides to each webview partition as they are created
+  // Apply session overrides and context menu to each webview as it is created
   mainWindow.webContents.on('did-attach-webview', (_e, webContents) => {
-    const partitionSession = webContents.session
-    applyHeaderOverrides(partitionSession)
+    applyHeaderOverrides(webContents.session)
+    attachContextMenu(webContents)
   })
 
   if (isDev) {
